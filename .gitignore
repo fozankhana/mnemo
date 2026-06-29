@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.DS_Store
+*.log
+
+# Local vault data (never commit a user's memory)
+.mnemo/
+*.db
+*.db-wal
+*.db-shm

@@ -1,0 +1,19 @@
+{
+  "name": "mnemo",
+  "version": "0.1.0",
+  "description": "Mnemo — a user-owned memory layer for your AI tools. Local-first, consent-gated, auditable.",
+  "type": "module",
+  "bin": {
+    "mnemo": "./dist/index.js"
+  },
+  "files": ["dist"],
+  "keywords": ["mcp", "ai", "memory", "llm", "claude", "cursor", "privacy", "local-first"],
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@mnemo/core": "workspace:*",
+    "@mnemo/mcp": "workspace:*"
+  }
+}
