@@ -83,12 +83,13 @@ export class ConsentEngine {
       .run(clientId, scope, modes.canRead ? 1 : 0, modes.canWrite ? 1 : 0, Date.now());
   }
 
-  revoke(clientId: string, scope: string): void {
-    this.db
+  revoke(clientId: string, scope: string): boolean {
+    const result = this.db
       .prepare(
         `UPDATE grants SET revoked_at = ? WHERE client_id = ? AND scope = ? AND revoked_at IS NULL`,
       )
       .run(Date.now(), clientId, scope);
+    return Number(result.changes) > 0;
   }
 
   listClients(): ClientInfo[] {

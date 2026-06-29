@@ -32,7 +32,7 @@ This is the difference from framework memory (mem0, Letta) and vendor memory: Mn
 > Requires **Node ≥ 22** (Mnemo uses the built-in `node:sqlite` — no native build, no external services).
 
 ```bash
-git clone <your-fork> mnemo && cd mnemo
+git clone https://github.com/fozankhana/mnemo && cd mnemo
 pnpm install
 pnpm build
 
@@ -111,6 +111,7 @@ mnemo config [--client <id>]      Print an MCP config snippet
 mnemo grant <client> <scope>      Grant access (--read --write; default both; scope "*" = all)
 mnemo revoke <client> <scope>     Revoke a grant
 mnemo add <text...> [--scope s]   Add a memory as the owner
+mnemo delete <memory-id>          Delete a memory by id
 mnemo search <query...>           Semantic search across all scopes
 mnemo clients | scopes            List clients / scopes
 mnemo audit [--limit n]           Show recent audit entries

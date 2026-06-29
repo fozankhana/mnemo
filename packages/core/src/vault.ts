@@ -117,15 +117,18 @@ export class AdminApi {
       detail: `for=${clientId};read=${modes.canRead ? 1 : 0};write=${modes.canWrite ? 1 : 0}`,
     });
   }
-  revoke(clientId: string, scope: string): void {
-    this.vault.consent.revoke(clientId, scope);
-    this.vault.audit.record({
-      clientId: OWNER_CLIENT_ID,
-      action: "revoke",
-      scope,
-      allowed: true,
-      detail: `for=${clientId}`,
-    });
+  revoke(clientId: string, scope: string): boolean {
+    const revoked = this.vault.consent.revoke(clientId, scope);
+    if (revoked) {
+      this.vault.audit.record({
+        clientId: OWNER_CLIENT_ID,
+        action: "revoke",
+        scope,
+        allowed: true,
+        detail: `for=${clientId}`,
+      });
+    }
+    return revoked;
   }
 
   // audit + export

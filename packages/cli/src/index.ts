@@ -47,6 +47,7 @@ USAGE
   mnemo grant <client> <scope>      Grant a client access (--read --write; default both).
   mnemo revoke <client> <scope>     Revoke a client's grant on a scope.
   mnemo add <text...> [--scope s]   Add a memory as the owner.
+  mnemo delete <memory-id>          Delete a memory by id.
   mnemo search <query...>           Semantic search across all scopes.
   mnemo clients                     List connected clients and their status.
   mnemo scopes                      List scopes.
@@ -118,9 +119,29 @@ async function main(): Promise<void> {
       const [, client, scope] = _;
       if (!client || !scope) return fail("usage: mnemo revoke <client> <scope>");
       const v = openVault();
-      v.admin.revoke(client, scope);
+      const revoked = v.admin.revoke(client, scope);
       v.close();
-      process.stdout.write(`Revoked ${client} → "${scope}".\n`);
+      if (revoked) {
+        process.stdout.write(`Revoked ${client} → "${scope}".\n`);
+      } else {
+        process.stderr.write(`No active grant found for client "${client}" on scope "${scope}".\n`);
+        process.exitCode = 1;
+      }
+      return;
+    }
+
+    case "delete": {
+      const [, memId] = _;
+      if (!memId) return fail("usage: mnemo delete <memory-id>");
+      const v = openVault();
+      const deleted = v.admin.deleteMemory(memId);
+      v.close();
+      if (deleted) {
+        process.stdout.write(`Deleted ${memId}.\n`);
+      } else {
+        process.stderr.write(`Memory "${memId}" not found.\n`);
+        process.exitCode = 1;
+      }
       return;
     }
 
@@ -153,6 +174,13 @@ async function main(): Promise<void> {
       }
       for (const h of hits) {
         process.stdout.write(`[${h.score.toFixed(2)}] (${h.scope}) ${h.content}\n`);
+      }
+      const best = hits[0]?.score ?? 0;
+      if (best < 0.15) {
+        process.stderr.write(
+          "Tip: low relevance scores — the default lexical embedder works best with keyword queries.\n" +
+            "Set MNEMO_EMBEDDINGS=fastembed for semantic search (requires npm install mnemo-fastembed).\n",
+        );
       }
       return;
     }
