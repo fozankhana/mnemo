@@ -157,4 +157,4 @@ Monorepo layout: `packages/core` (vault, embeddings, consent, audit) · `package
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+AGPL-3.0 — see [LICENSE](LICENSE). The local core is free and open; commercial use in a hosted/SaaS context requires open-sourcing modifications.
